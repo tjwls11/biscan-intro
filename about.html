@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="ko" class="scroll-smooth scroll-pt-[72px]">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="ZAP API 기반 SQL Injection, XSS 동적 탐지 시스템. 2026 정보보호학전공 졸업작품, 그것이정보남"
+    />
+    <title>BIScan | ZAP API 기반 SQL Injection, XSS 동적 탐지 시스템</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap"
+    />
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: [
+                '"IBM Plex Sans KR"',
+                '"Apple SD Gothic Neo"',
+                '"Malgun Gothic"',
+                'sans-serif',
+              ],
+              mono: ['"IBM Plex Mono"', 'D2Coding', 'Consolas', 'monospace'],
+            },
+            colors: {
+              ink: {
+                DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+                2: 'rgb(var(--ink-2) / <alpha-value>)',
+                3: 'rgb(var(--ink-3) / <alpha-value>)',
+              },
+              line: 'rgb(var(--line) / <alpha-value>)',
+              paper: 'rgb(var(--paper) / <alpha-value>)',
+              accent: 'rgb(var(--accent) / <alpha-value>)',
+            },
+          },
+        },
+      }
+    </script>
+    <style type="text/tailwindcss">
+      :root {
+        color-scheme: light;
+        --ink: 23 24 28;
+        --ink-2: 75 78 87;
+        --ink-3: 139 142 150;
+        --line: 220 221 224;
+        --paper: 251 251 250;
+        --accent: 61 74 120;
+      }
+
+      @layer components {
+        /* 표: 가로선만, 모바일에서는 행 단위 목록 */
+        .tbl {
+          @apply w-full border-collapse text-[15px];
+        }
+        .tbl th {
+          @apply whitespace-nowrap border-b border-ink py-2.5 pr-4 text-left align-top text-sm font-semibold;
+        }
+        .tbl td {
+          @apply border-b border-line py-2.5 pr-4 text-left align-top text-ink-2;
+        }
+        .tbl td:first-child {
+          @apply whitespace-nowrap text-ink;
+        }
+        @media (max-width: 767px) {
+          .tbl thead {
+            @apply hidden;
+          }
+          .tbl,
+          .tbl tbody,
+          .tbl tr,
+          .tbl td {
+            @apply block;
+          }
+          .tbl tr {
+            @apply border-b border-line py-3 first:border-t first:border-t-ink;
+          }
+          .tbl td {
+            @apply border-0 p-0 empty:hidden;
+          }
+          .tbl td:first-child {
+            @apply mb-0.5 whitespace-normal font-semibold;
+          }
+        }
+
+        .terms {
+          @apply grid grid-cols-[112px_minmax(0,1fr)] gap-x-4 gap-y-2 text-[15px] md:grid-cols-[128px_minmax(0,1fr)];
+        }
+        .terms dt {
+          @apply font-semibold;
+        }
+        .terms dd {
+          @apply text-ink-2;
+        }
+
+        .step {
+          @apply grid grid-cols-[28px_minmax(0,1fr)] gap-x-3 border-b border-line py-3 first:pt-0 md:grid-cols-[32px_96px_minmax(0,1fr)];
+        }
+        .step > i {
+          @apply font-mono text-[13px] not-italic leading-[1.9] text-accent;
+        }
+        .step > strong {
+          @apply font-semibold;
+        }
+        .step > span {
+          @apply col-start-2 text-ink-2 md:col-start-auto;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="m-0 bg-paper font-sans text-base leading-[1.7] text-ink antialiased [word-break:keep-all]"
+  >
+    <header class="sticky top-0 z-10 border-b border-line bg-paper">
+      <div
+        class="mx-auto flex h-14 w-[min(1040px,calc(100%-32px))] items-center justify-between"
+      >
+        <a class="font-semibold tracking-wide no-underline" href="#">BIScan</a>
+        <nav class="flex gap-6 text-sm text-ink-2" aria-label="페이지 메뉴">
+          <a class="hidden py-3 hover:text-ink md:inline" href="#flow"
+            >동작 과정</a
+          >
+          <a class="hidden py-3 hover:text-ink md:inline" href="#verdict"
+            >판정 방식</a
+          >
+          <a class="hidden py-3 hover:text-ink md:inline" href="#test"
+            >테스트</a
+          >
+          <a
+            class="py-3 hover:text-ink"
+            href="https://github.com/gudrhkdvps07/BIScan"
+            target="_blank"
+            rel="noopener noreferrer"
+            >GitHub</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main class="mx-auto w-[min(1040px,calc(100%-32px))]">
+      <section class="pb-12 pt-14 md:pt-[88px]">
+        <p class="text-sm text-ink-3">2026 정보보호학전공 졸업작품</p>
+        <h1
+          class="mt-4 text-[clamp(32px,5vw,52px)] font-semibold leading-[1.22] tracking-[-0.01em]"
+        >
+          ZAP API 기반<br />SQL Injection, XSS<br />동적 탐지 시스템
+        </h1>
+        <p class="mt-6 max-w-[34em] text-base text-ink-2 md:text-lg">
+          공격별 증거 검증과 검사 상태, 사유 코드 기록으로 판정 근거를 남기는
+          블랙박스 진단 도구
+        </p>
+        <dl class="mt-10 flex flex-wrap gap-x-10 gap-y-2 text-sm">
+          <div class="flex gap-2.5">
+            <dt class="text-ink-3">팀</dt>
+            <dd>그것이정보남</dd>
+          </div>
+          <div class="flex gap-2.5">
+            <dt class="text-ink-3">팀원</dt>
+            <dd>백서진, 박윤지, 정보남, 함근희</dd>
+          </div>
+          <div class="flex gap-2.5">
+            <dt class="text-ink-3">지도</dt>
+            <dd>이병천 교수</dd>
+          </div>
+          <div class="flex gap-2.5">
+            <dt class="text-ink-3">발표</dt>
+            <dd class="font-mono">2026.11.03</dd>
+          </div>
+        </dl>
+      </section>
+
+      <figure class="mb-16 md:mb-24">
+        <img
+          class="block h-auto max-w-full border border-line"
+          src="./assets/report.png"
+          width="2160"
+          height="1650"
+          alt="검사 완료 후 리포트 화면, 판정 요약과 항목별 결과"
+        />
+        <figcaption class="mt-2.5 text-[13px] text-ink-3">
+          검사 결과 리포트 화면
+        </figcaption>
+      </figure>
+
+      <section
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="why"
+      >
+        <h2 id="why" class="text-lg font-semibold leading-normal">배경</h2>
+        <div class="max-w-[40em] space-y-4 text-ink-2">
+          <p>
+            2025년 개인정보 유출신고 46% 증가, 유출 원인의 62%가 해킹.
+            랜섬웨어와 웹 취약점 공격 증가세
+            <span class="mt-0.5 block text-[13px] text-ink-3"
+              >연합뉴스, 2026.05.15</span
+            >
+          </p>
+          <p>
+            소스코드 없이 실행 중인 서비스를 점검하고, 공격 요청에 대한 응답과
+            동작으로 증거를 확인하기 위해 동적 분석(DAST) 방식 선택
+          </p>
+          <p>
+            진단 대상은 SQL Injection과 XSS. Injection은 OWASP Top 10:2025 5위
+            항목이며, 서버 응답 변화와 브라우저 실행 여부라는 서로 다른 방식으로
+            검증 가능
+          </p>
+        </div>
+      </section>
+
+      <section
+        id="flow"
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="flow-title"
+      >
+        <h2 id="flow-title" class="text-lg font-semibold leading-normal">
+          동작 과정
+        </h2>
+        <ol class="m-0 list-none p-0">
+          <li class="step">
+            <i>01</i><strong>수집</strong
+            ><span
+              >Firefox 요청을 ZAP 프록시로 기록, Spider와 Ajax Spider
+              크롤링</span
+            >
+          </li>
+          <li class="step">
+            <i>02</i><strong>정규화</strong
+            ><span
+              >범위 밖 요청, 로그아웃과 삭제 같은 위험 URL 제외. 같은 이름의
+              파라미터도 위치와 순서로 구분해 검사 지점 구성</span
+            >
+          </li>
+          <li class="step">
+            <i>03</i><strong>공격 선별</strong
+            ><span
+              >입력값 반사 여부와 출력 문맥 분석, 조건에 맞지 않는 공격은 사유와
+              함께 제외</span
+            >
+          </li>
+          <li class="step">
+            <i>04</i><strong>공격 생성</strong
+            ><span
+              >검사 지점마다 기준 요청 1회, SQLi 공격 6종, XSS 공격 14종</span
+            >
+          </li>
+          <li class="step">
+            <i>05</i><strong>전송</strong
+            ><span
+              >ZAP API로 동일 로그인 세션 유지, GET과 HEAD만 재시도, POST 재전송
+              방지</span
+            >
+          </li>
+          <li class="step">
+            <i>06</i><strong>판정</strong
+            ><span>공격별 증거 확인, Firefox에서 XSS 실행 확인</span>
+          </li>
+          <li class="step">
+            <i>07</i><strong>집계</strong
+            ><span
+              >판정 근거, 진행 상태, 실패 사유 저장 후 웹 화면과 PDF 보고서로
+              출력</span
+            >
+          </li>
+        </ol>
+      </section>
+
+      <section
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="screens"
+      >
+        <h2 id="screens" class="text-lg font-semibold leading-normal">
+          사용 화면
+        </h2>
+        <div class="grid gap-6 md:grid-cols-2">
+          <figure>
+            <a class="group" href="./assets/settings.png"
+              ><img
+                class="block h-auto max-w-full border border-line group-hover:border-ink-3"
+                src="./assets/settings.png"
+                width="2160"
+                height="1650"
+                alt="스캔 설정 화면"
+                loading="lazy"
+            /></a>
+            <figcaption class="mt-2.5 text-[13px] text-ink-3">
+              <strong class="block text-sm font-semibold text-ink">설정</strong
+              >타겟 URL, Ajax Spider 사용 여부, 저장형 XSS 재방문 주소
+            </figcaption>
+          </figure>
+          <figure>
+            <a class="group" href="./assets/execution.png"
+              ><img
+                class="block h-auto max-w-full border border-line group-hover:border-ink-3"
+                src="./assets/execution.png"
+                width="2160"
+                height="1650"
+                alt="스캔 실행 화면"
+                loading="lazy"
+            /></a>
+            <figcaption class="mt-2.5 text-[13px] text-ink-3">
+              <strong class="block text-sm font-semibold text-ink">실행</strong
+              >검사 항목, 진행률, 실시간 실행 로그
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section
+        id="verdict"
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="verdict-title"
+      >
+        <h2 id="verdict-title" class="text-lg font-semibold leading-normal">
+          판정 방식
+        </h2>
+        <div>
+          <h3 class="mb-2 font-semibold">SQL Injection</h3>
+          <div class="overflow-x-auto">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>방식</th>
+                  <th>확인 내용</th>
+                  <th>판정 조건</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>참거짓 기반</td>
+                  <td>참과 거짓 조건의 응답 내용 비교</td>
+                  <td>응답 차이 2쌍 이상, 재현 확인</td>
+                </tr>
+                <tr>
+                  <td>시간 지연 기반</td>
+                  <td>지연 구문 전후 응답 시간 비교</td>
+                  <td>
+                    <span class="font-mono">2.5</span>초 이상 지연
+                    <span class="font-mono">2</span>회 이상
+                  </td>
+                </tr>
+                <tr>
+                  <td>오류 기반</td>
+                  <td>응답 속 DB 오류 문구</td>
+                  <td>DB 관련 값 추출</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mb-2 mt-10 font-semibold">XSS</h3>
+          <div class="overflow-x-auto">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>유형</th>
+                  <th>확인 경로</th>
+                  <th>판정 조건</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Reflected</td>
+                  <td>공격 응답을 브라우저에서 재렌더링</td>
+                  <td>토큰 경고창 확인</td>
+                </tr>
+                <tr>
+                  <td>Stored</td>
+                  <td>저장 후 재조회한 화면을 브라우저에서 확인</td>
+                  <td>저장 확인, 토큰 실행</td>
+                </tr>
+                <tr>
+                  <td>DOM</td>
+                  <td>세션 쿠키를 유지한 채 실제 URL로 이동</td>
+                  <td>토큰 경고창 확인</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="mb-2 mt-10 font-semibold">결과 기록</h3>
+          <p class="text-[15px] text-ink-2">
+            취약 여부와 검사 완료 여부를 따로 기록. 요청 실패나 미완료 검사를
+            미탐지로 처리하지 않기 위한 구분
+          </p>
+          <div class="mt-5 grid gap-8 md:grid-cols-2">
+            <dl class="terms">
+              <dt>취약 가능성 높음</dt>
+              <dd>공격 실행, SQLi 재현 또는 값 추출 확인</dd>
+              <dt>취약 신호 관찰</dt>
+              <dd>반사 또는 오류 신호 확인</dd>
+              <dt>공격 근거 미확인</dt>
+              <dd>검사 완료 후 근거 없음</dd>
+              <dt>검토 필요</dt>
+              <dd>검사 미완료, 사유 코드 기록</dd>
+            </dl>
+            <dl class="terms">
+              <dt>완료</dt>
+              <dd>모든 시도 정상 종료</dd>
+              <dt>부분 완료</dt>
+              <dd>일부 시도 또는 검증 단계 미완료</dd>
+              <dt>실패</dt>
+              <dd>모든 시도의 요청 전송 실패</dd>
+              <dt>미실행</dt>
+              <dd>중단 또는 선행 단계 실패로 미전송</dd>
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="test"
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="test-title"
+      >
+        <h2 id="test-title" class="text-lg font-semibold leading-normal">
+          테스트 환경
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>대상</th>
+                <th>용도</th>
+                <th>규모</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>OWASP Benchmark 1.2</td>
+                <td>정답표 기반 정량 평가</td>
+                <td>
+                  SQLi <span class="font-mono">504</span>건, XSS
+                  <span class="font-mono">455</span>건
+                </td>
+              </tr>
+              <tr>
+                <td>자체 테스트 사이트</td>
+                <td>PHP, MySQL 게시판</td>
+                <td>
+                  SQLi <span class="font-mono">8</span>곳, XSS
+                  <span class="font-mono">7</span>곳
+                </td>
+              </tr>
+              <tr>
+                <td>DVWA</td>
+                <td>저장형 재조회 등 동작 검증</td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>WackoPicko</td>
+                <td>다양한 입력과 공격 경로 검증</td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <a
+            class="mt-5 inline-block text-[15px] text-accent underline underline-offset-4"
+            href="./target.html"
+            >테스트 대상과 평가 방법</a
+          >
+        </div>
+      </section>
+
+      <section
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="limit"
+      >
+        <h2 id="limit" class="text-lg font-semibold leading-normal">
+          한계와 향후 과제
+        </h2>
+        <div class="overflow-x-auto">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th>한계</th>
+                <th>향후 과제</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>쿠키, 헤더 입력 미검사</td>
+                <td>입력 경로 확장</td>
+              </tr>
+              <tr>
+                <td>JSON, multipart 본문 미지원</td>
+                <td>요청 형식 확장</td>
+              </tr>
+              <tr>
+                <td>수집되지 않은 페이지와 입력 지점은 검사 불가</td>
+                <td>수집 범위 확대</td>
+              </tr>
+              <tr>
+                <td>외부 스크립트 의존 XSS의 실행 확인 한계</td>
+                <td>재조회 경로와 브라우저 검증 보완</td>
+              </tr>
+              <tr>
+                <td>시간 지연 SQLi의 네트워크 지연 영향</td>
+                <td>미탐, 미완료 사례 분석으로 규칙 개선</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section
+        class="grid gap-5 border-t border-ink pb-12 pt-8 md:grid-cols-[200px_minmax(0,1fr)] md:gap-8 md:pb-16 md:pt-12"
+        aria-labelledby="stack"
+      >
+        <h2 id="stack" class="text-lg font-semibold leading-normal">
+          기술 스택
+        </h2>
+        <dl class="terms md:grid-cols-[96px_minmax(0,1fr)]">
+          <dt>수집</dt>
+          <dd>
+            OWASP ZAP <span class="font-mono">2.17</span> (Docker, API 모드)
+          </dd>
+          <dt>판정</dt>
+          <dd>
+            Python <span class="font-mono">3.13</span>, python-owasp-zap-v2.4,
+            Playwright (Firefox), BeautifulSoup4
+          </dd>
+          <dt>화면</dt>
+          <dd>FastAPI, Uvicorn, JavaScript</dd>
+          <dt>환경 설정</dt>
+          <dd>
+            PowerShell 스크립트로 ZAP 이미지, 인증서 배포, 프록시 설정 자동화
+          </dd>
+        </dl>
+      </section>
+    </main>
+
+    <footer
+      class="mx-auto flex w-[min(1040px,calc(100%-32px))] flex-wrap justify-between gap-4 border-t border-line pb-12 pt-8 text-sm text-ink-3"
+    >
+      <span>그것이정보남</span>
+      <a
+        class="text-accent underline underline-offset-4"
+        href="https://github.com/gudrhkdvps07/BIScan"
+        target="_blank"
+        rel="noopener noreferrer"
+        >github.com/tjwls11/BIScan</a
+      >
+    </footer>
+  </body>
+</html>

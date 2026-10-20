@@ -1,0 +1,284 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1650 952" role="img" lang="ko" aria-labelledby="archify-diagram-title archify-diagram-description" data-preset="classic" data-quality-profile="showcase" data-reader-fit="intrinsic-height" data-reader-min-text="7.5" data-reader-primary-text="14">
+        <title id="archify-diagram-title">BIScan 시스템 구조</title>
+        <desc id="archify-diagram-description">BIScan 구성 요소와 데이터 흐름</desc>
+        <!-- Definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-default"/>
+          </marker>
+          <marker id="arrowhead-emphasis" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-emphasis"/>
+          </marker>
+          <marker id="arrowhead-security" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-security"/>
+          </marker>
+          <marker id="arrowhead-dashed" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" class="m-dashed"/>
+          </marker>
+          
+        </defs>
+
+        <!-- Background Grid -->
+        
+
+        <!-- Boundaries (behind everything) -->
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="region" data-composition-frame-id="0" data-composition-frame-label="로컬 웹 서버 (src/web)" x="240" y="190" width="790" height="114" rx="12" class="c-region" stroke-width="1"/>
+
+        <!-- Connection paths (before components for correct z-order) -->
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 160 252 L 270 252" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="user" data-edge-to="ui" data-edge-label="브라우저" data-edge-key="0" data-edge-id="user-ui" data-composition-points="160,252;270,252" data-composition-crossover="halo" data-composition-independent="true" d="M 160 252 L 270 252" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 440 252 L 550 252" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="ui" data-edge-to="api" data-edge-label="REST, SSE" data-edge-key="1" data-edge-id="ui-api" data-composition-points="440,252;550,252" data-composition-crossover="halo" data-composition-independent="true" d="M 440 252 L 550 252" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 720 252 L 830 252" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="api" data-edge-to="manager" data-edge-label="시작, 중지" data-edge-key="2" data-edge-id="api-manager" data-composition-points="720,252;830,252" data-composition-crossover="halo" data-composition-independent="true" d="M 720 252 L 830 252" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1000 252 L 1110 252" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="manager" data-edge-to="orchestrator" data-edge-label="스레드 실행" data-edge-key="3" data-edge-id="manager-orch" data-composition-points="1000,252;1110,252" data-composition-crossover="halo" data-composition-independent="true" d="M 1000 252 L 1110 252" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1181 284 L 1181 344 Q 1181 352 1173 352 L 923 352 Q 915 352 915 360 L 915 420" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="orchestrator" data-edge-to="collector" data-edge-key="4" data-edge-id="orch-collector" data-composition-points="1181,284;1181,352;915,352;915,420" data-composition-crossover="halo" data-composition-independent="true" d="M 1181 284 L 1181 344 Q 1181 352 1173 352 L 923 352 Q 915 352 915 360 L 915 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1195 284 L 1195 420" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="orchestrator" data-edge-to="scan" data-edge-key="5" data-edge-id="orch-scan" data-composition-points="1195,284;1195,420" data-composition-crossover="halo" data-composition-independent="true" d="M 1195 284 L 1195 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1209 284 L 1209 344 Q 1209 352 1217 352 L 1492 352 Q 1500 352 1500 360 L 1500 420" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="orchestrator" data-edge-to="analyzer" data-edge-key="6" data-edge-id="orch-analyzer" data-composition-points="1209,284;1209,352;1500,352;1500,420" data-composition-crossover="halo" data-composition-independent="true" d="M 1209 284 L 1209 344 Q 1209 352 1217 352 L 1492 352 Q 1500 352 1500 360 L 1500 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <path data-edge-from="orchestrator" data-edge-to="results" data-edge-label="결과 기록" data-edge-key="7" data-edge-id="orch-results" data-composition-points="1195,220;1195,72;1000,72" d="M 1195 220 L 1195 80 Q 1195 72 1187 72 L 1000 72" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <path data-edge-from="api" data-edge-to="results" data-edge-label="보고서 조회" data-edge-key="8" data-edge-id="api-results" data-composition-points="635,220;635,72;830,72" d="M 635 220 L 635 80 Q 635 72 643 72 L 830 72" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 635 284 L 635 420" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="api" data-edge-to="config" data-edge-label="설정 저장" data-edge-key="9" data-edge-id="api-config" data-composition-points="635,284;635,420" data-composition-crossover="halo" data-composition-independent="true" d="M 635 284 L 635 420" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 830 452 L 720 452" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="collector" data-edge-to="config" data-edge-label="설정 읽기" data-edge-key="10" data-edge-id="collector-config" data-composition-points="830,452;720,452" data-composition-crossover="halo" data-composition-independent="true" d="M 830 452 L 720 452" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 915 484 L 915 620" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="collector" data-edge-to="zap" data-edge-label="Spider" data-edge-key="11" data-edge-id="collector-zap" data-composition-points="915,484;915,620" data-composition-crossover="halo" data-composition-independent="true" d="M 915 484 L 915 620" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1195 484 L 1195 620" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="scan" data-edge-to="rules" data-edge-label="룰 로드" data-edge-key="12" data-edge-id="scan-rules" data-composition-points="1195,484;1195,620" data-composition-crossover="halo" data-composition-independent="true" d="M 1195 484 L 1195 620" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1095 452 L 1055.5 452 Q 1047.5 452 1047.5 460 L 1047.5 644 Q 1047.5 652 1039.5 652 L 1000 652" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="scan" data-edge-to="zap" data-edge-label="요청 전송" data-edge-key="13" data-edge-id="scan-zap" data-composition-points="1095,452;1047.5,452;1047.5,652;1000,652" data-composition-crossover="halo" data-composition-independent="true" d="M 1095 452 L 1055.5 452 Q 1047.5 452 1047.5 460 L 1047.5 644 Q 1047.5 652 1039.5 652 L 1000 652" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 915 684 L 915 820" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="zap" data-edge-to="target" data-edge-label="HTTP" data-edge-key="14" data-edge-id="zap-target" data-composition-points="915,684;915,820" data-composition-crossover="halo" data-composition-independent="true" d="M 915 684 L 915 820" class="a-default" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+        </g>
+        <g data-graph-role="automatic-crossover">
+          <path data-graph-role="automatic-crossover-underlay" d="M 1500 484 L 1500 620" fill="none" stroke="var(--mask)" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" pointer-events="none"/>
+          <path data-edge-from="analyzer" data-edge-to="firefox" data-edge-label="XSS 실행 확인" data-edge-key="15" data-edge-id="analyzer-firefox" data-composition-points="1500,484;1500,620" data-composition-crossover="halo" data-composition-independent="true" d="M 1500 484 L 1500 620" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+        </g>
+        <path data-edge-from="firefox" data-edge-to="target" data-edge-label="페이지 열기" data-edge-key="16" data-edge-id="firefox-target" data-composition-points="1500,684;1500,852;1000,852" d="M 1500 684 L 1500 844 Q 1500 852 1492 852 L 1000 852" class="a-dashed" stroke-width="1.5" marker-end="url(#arrowhead-dashed)"/>
+
+        <!-- Components -->
+        <g id="node-user" data-node-id="user" data-node-label="사용자" tabindex="0" role="button" aria-label="사용자 포커스, 브라우저, 아키텍처 구성요소" aria-pressed="false" data-node-kind="external" data-node-sublabel="브라우저" data-node-context="사용자">
+          <title>사용자 , 브라우저 , 아키텍처 구성요소</title>
+          <rect x="40" y="220" width="120" height="64" rx="6" class="c-mask"/>
+          <rect x="40" y="220" width="120" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="100" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">사용자</text>
+        <text data-detail="context" x="100" y="270" class="t-muted" font-size="9" text-anchor="middle">브라우저</text>
+        <text x="48" y="232" font-size="8" class="t-muted">외부</text></g>
+
+        <g id="node-ui" data-node-id="ui" data-node-label="웹 화면" tabindex="0" role="button" aria-label="웹 화면 포커스, 설정, 실행, 리포트, 로컬 웹 서버 (src/web)" aria-pressed="false" data-node-kind="frontend" data-node-sublabel="설정, 실행, 리포트" data-node-context="로컬 웹 서버">
+          <title>웹 화면 , 설정, 실행, 리포트 , 로컬 웹 서버 (src/web)</title>
+          <rect x="270" y="220" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="270" y="220" width="170" height="64" rx="6" class="c-frontend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="355" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">웹 화면</text>
+        <text data-detail="context" x="355" y="270" class="t-muted" font-size="9" text-anchor="middle">설정, 실행, 리포트</text>
+        <text x="278" y="232" font-size="8" class="t-muted">프런트엔드</text></g>
+
+        <g id="node-api" data-node-id="api" data-node-label="웹 서버" tabindex="0" role="button" aria-label="웹 서버 포커스, FastAPI, 로컬 전용, 로컬 웹 서버 (src/web)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="FastAPI, 로컬 전용" data-node-context="로컬 웹 서버">
+          <title>웹 서버 , FastAPI, 로컬 전용 , 로컬 웹 서버 (src/web)</title>
+          <rect x="550" y="220" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="550" y="220" width="170" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="635" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">웹 서버</text>
+        <text data-detail="context" x="635" y="270" class="t-muted" font-size="9" text-anchor="middle">FastAPI, 로컬 전용</text>
+        <text x="558" y="232" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-manager" data-node-id="manager" data-node-label="스캔 관리자" tabindex="0" role="button" aria-label="스캔 관리자 포커스, ScanManager, 로컬 웹 서버 (src/web)" aria-pressed="false" data-node-kind="backend" data-node-sublabel="ScanManager" data-node-context="로컬 웹 서버">
+          <title>스캔 관리자 , ScanManager , 로컬 웹 서버 (src/web)</title>
+          <rect x="830" y="220" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="830" y="220" width="170" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="915" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">스캔 관리자</text>
+        <text data-detail="context" x="915" y="270" class="t-muted" font-size="9" text-anchor="middle">ScanManager</text>
+        <text x="838" y="232" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-orchestrator" data-node-id="orchestrator" data-node-label="스캔 흐름 제어" tabindex="0" role="button" aria-label="스캔 흐름 제어 포커스, orchestrator, 아키텍처 구성요소" aria-pressed="false" data-node-kind="backend" data-node-sublabel="orchestrator" data-node-context="스캔 엔진">
+          <title>스캔 흐름 제어 , orchestrator , 아키텍처 구성요소</title>
+          <rect x="1110" y="220" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="1110" y="220" width="170" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="1195" y="254" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">스캔 흐름 제어</text>
+        <text data-detail="context" x="1195" y="270" class="t-muted" font-size="9" text-anchor="middle">orchestrator</text>
+        <text x="1118" y="232" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-collector" data-node-id="collector" data-node-label="1. 수집" tabindex="0" role="button" aria-label="1. 수집 포커스, collector, 아키텍처 구성요소" aria-pressed="false" data-node-kind="backend" data-node-sublabel="collector" data-node-context="스캔 엔진">
+          <title>1. 수집 , collector , 아키텍처 구성요소</title>
+          <rect x="830" y="420" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="830" y="420" width="170" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="915" y="454" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">1. 수집</text>
+        <text data-detail="context" x="915" y="470" class="t-muted" font-size="9" text-anchor="middle">collector</text>
+        <text x="838" y="432" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-scan" data-node-id="scan" data-node-label="2. 요청 생성, 전송" tabindex="0" role="button" aria-label="2. 요청 생성, 전송 포커스, scan, 아키텍처 구성요소" aria-pressed="false" data-node-kind="backend" data-node-sublabel="scan" data-node-context="스캔 엔진">
+          <title>2. 요청 생성, 전송 , scan , 아키텍처 구성요소</title>
+          <rect x="1095" y="420" width="200" height="64" rx="6" class="c-mask"/>
+          <rect x="1095" y="420" width="200" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="1195" y="454" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">2. 요청 생성, 전송</text>
+        <text data-detail="context" x="1195" y="470" class="t-muted" font-size="9" text-anchor="middle">scan</text>
+        <text x="1103" y="432" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-analyzer" data-node-id="analyzer" data-node-label="3. 판정" tabindex="0" role="button" aria-label="3. 판정 포커스, analyzer (SQLi, XSS), 아키텍처 구성요소" aria-pressed="false" data-node-kind="backend" data-node-sublabel="analyzer (SQLi, XSS)" data-node-context="스캔 엔진">
+          <title>3. 판정 , analyzer (SQLi, XSS) , 아키텍처 구성요소</title>
+          <rect x="1390" y="420" width="220" height="64" rx="6" class="c-mask"/>
+          <rect x="1390" y="420" width="220" height="64" rx="6" class="c-backend" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="1500" y="454" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">3. 판정</text>
+        <text data-detail="context" x="1500" y="470" class="t-muted" font-size="9" text-anchor="middle">analyzer (SQLi, XSS)</text>
+        <text x="1398" y="432" font-size="8" class="t-muted">백엔드</text></g>
+
+        <g id="node-rules" data-node-id="rules" data-node-label="공격 룰" tabindex="0" role="button" aria-label="공격 룰 포커스, attack_requests, 아키텍처 구성요소" aria-pressed="false" data-node-kind="database" data-node-sublabel="attack_requests" data-node-context="스캔 엔진">
+          <title>공격 룰 , attack_requests , 아키텍처 구성요소</title>
+          <rect x="1110" y="620" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="1110" y="620" width="170" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="1195" y="654" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">공격 룰</text>
+        <text data-detail="context" x="1195" y="670" class="t-muted" font-size="9" text-anchor="middle">attack_requests</text>
+        <text x="1118" y="632" font-size="8" class="t-muted">데이터 저장</text></g>
+
+        <g id="node-config" data-node-id="config" data-node-label="설정 파일" tabindex="0" role="button" aria-label="설정 파일 포커스, config/*.json, 아키텍처 구성요소" aria-pressed="false" data-node-kind="database" data-node-sublabel="config/*.json" data-node-context="데이터">
+          <title>설정 파일 , config/*.json , 아키텍처 구성요소</title>
+          <rect x="550" y="420" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="550" y="420" width="170" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="635" y="454" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">설정 파일</text>
+        <text data-detail="context" x="635" y="470" class="t-muted" font-size="9" text-anchor="middle">config/*.json</text>
+        <text x="558" y="432" font-size="8" class="t-muted">데이터 저장</text></g>
+
+        <g id="node-results" data-node-id="results" data-node-label="결과 폴더" tabindex="0" role="button" aria-label="결과 폴더 포커스, results/collection_*, 아키텍처 구성요소" aria-pressed="false" data-node-kind="database" data-node-sublabel="results/collection_*" data-node-context="데이터">
+          <title>결과 폴더 , results/collection_* , 아키텍처 구성요소</title>
+          <rect x="830" y="40" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="830" y="40" width="170" height="64" rx="6" class="c-database" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="915" y="74" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">결과 폴더</text>
+        <text data-detail="context" x="915" y="90" class="t-muted" font-size="9" text-anchor="middle">results/collection_*</text>
+        <text x="838" y="52" font-size="8" class="t-muted">데이터 저장</text></g>
+
+        <g id="node-zap" data-node-id="zap" data-node-label="OWASP ZAP" tabindex="0" role="button" aria-label="OWASP ZAP 포커스, 프록시, Spider, 아키텍처 구성요소" aria-pressed="false" data-node-kind="external" data-node-sublabel="프록시, Spider" data-node-context="외부 시스템">
+          <title>OWASP ZAP , 프록시, Spider , 아키텍처 구성요소</title>
+          <rect x="830" y="620" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="830" y="620" width="170" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="915" y="654" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">OWASP ZAP</text>
+        <text data-detail="context" x="915" y="670" class="t-muted" font-size="9" text-anchor="middle">프록시, Spider</text>
+        <text x="838" y="632" font-size="8" class="t-muted">외부</text></g>
+
+        <g id="node-target" data-node-id="target" data-node-label="대상 웹앱" tabindex="0" role="button" aria-label="대상 웹앱 포커스, target_url, 아키텍처 구성요소" aria-pressed="false" data-node-kind="external" data-node-sublabel="target_url" data-node-context="외부 시스템">
+          <title>대상 웹앱 , target_url , 아키텍처 구성요소</title>
+          <rect x="830" y="820" width="170" height="64" rx="6" class="c-mask"/>
+          <rect x="830" y="820" width="170" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="915" y="854" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">대상 웹앱</text>
+        <text data-detail="context" x="915" y="870" class="t-muted" font-size="9" text-anchor="middle">target_url</text>
+        <text x="838" y="832" font-size="8" class="t-muted">외부</text></g>
+
+        <g id="node-firefox" data-node-id="firefox" data-node-label="헤드리스 브라우저" tabindex="0" role="button" aria-label="헤드리스 브라우저 포커스, Firefox, Playwright, 아키텍처 구성요소" aria-pressed="false" data-node-kind="external" data-node-sublabel="Firefox, Playwright" data-node-context="외부 시스템">
+          <title>헤드리스 브라우저 , Firefox, Playwright , 아키텍처 구성요소</title>
+          <rect x="1390" y="620" width="220" height="64" rx="6" class="c-mask"/>
+          <rect x="1390" y="620" width="220" height="64" rx="6" class="c-external" stroke-width="1.5"/>
+          
+          <text data-node-label="" data-detail-anchor="" x="1500" y="654" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">헤드리스 브라우저</text>
+        <text data-detail="context" x="1500" y="670" class="t-muted" font-size="9" text-anchor="middle">Firefox, Playwright</text>
+        <text x="1398" y="632" font-size="8" class="t-muted">외부</text></g>
+
+        <!-- Connection labels -->
+        <g data-detail="context" data-edge-from="user" data-edge-to="ui" data-edge-label="브라우저" data-edge-key="0" data-edge-id="user-ui">
+          <rect x="190.8" y="232" width="48.4" height="14" rx="3" class="c-mask"/>
+          <text x="215" y="242" class="t-edge-default" font-size="8" text-anchor="middle">브라우저</text>
+        </g>
+        <g data-detail="context" data-edge-from="ui" data-edge-to="api" data-edge-label="REST, SSE" data-edge-key="1" data-edge-id="ui-api">
+          <rect x="468.4" y="232" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="495" y="242" class="t-edge-default" font-size="8" text-anchor="middle">REST, SSE</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="manager" data-edge-label="시작, 중지" data-edge-key="2" data-edge-id="api-manager">
+          <rect x="746" y="232" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="775" y="242" class="t-edge-default" font-size="8" text-anchor="middle">시작, 중지</text>
+        </g>
+        <g data-detail="context" data-edge-from="manager" data-edge-to="orchestrator" data-edge-label="스레드 실행" data-edge-key="3" data-edge-id="manager-orch">
+          <rect x="1023.6" y="232" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="1055" y="242" class="t-edge-default" font-size="8" text-anchor="middle">스레드 실행</text>
+        </g>
+
+
+
+        <g data-detail="context" data-edge-from="orchestrator" data-edge-to="results" data-edge-label="결과 기록" data-edge-key="7" data-edge-id="orch-results">
+          <rect x="1070.9" y="52" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="1097.5" y="62" class="t-edge-default" font-size="8" text-anchor="middle">결과 기록</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="results" data-edge-label="보고서 조회" data-edge-key="8" data-edge-id="api-results">
+          <rect x="701.1" y="52" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="732.5" y="62" class="t-edge-default" font-size="8" text-anchor="middle">보고서 조회</text>
+        </g>
+        <g data-detail="context" data-edge-from="api" data-edge-to="config" data-edge-label="설정 저장" data-edge-key="9" data-edge-id="api-config">
+          <rect x="575.8" y="345" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="602.4" y="355" class="t-edge-default" font-size="8" text-anchor="middle">설정 저장</text>
+        </g>
+        <g data-detail="context" data-edge-from="collector" data-edge-to="config" data-edge-label="설정 읽기" data-edge-key="10" data-edge-id="collector-config">
+          <rect x="748.4" y="432" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="775" y="442" class="t-edge-default" font-size="8" text-anchor="middle">설정 읽기</text>
+        </g>
+        <g data-detail="context" data-edge-from="collector" data-edge-to="zap" data-edge-label="Spider" data-edge-key="11" data-edge-id="collector-zap">
+          <rect x="870.2" y="545" width="38.8" height="14" rx="3" class="c-mask"/>
+          <text x="889.6" y="555" class="t-edge-default" font-size="8" text-anchor="middle">Spider</text>
+        </g>
+        <g data-detail="context" data-edge-from="scan" data-edge-to="rules" data-edge-label="룰 로드" data-edge-key="12" data-edge-id="scan-rules">
+          <rect x="1145.4" y="545" width="43.6" height="14" rx="3" class="c-mask"/>
+          <text x="1167.2" y="555" class="t-edge-default" font-size="8" text-anchor="middle">룰 로드</text>
+        </g>
+        <g data-detail="context" data-edge-from="scan" data-edge-to="zap" data-edge-label="요청 전송" data-edge-key="13" data-edge-id="scan-zap">
+          <rect x="1020.9" y="532" width="53.199999999999996" height="14" rx="3" class="c-mask"/>
+          <text x="1047.5" y="542" class="t-edge-default" font-size="8" text-anchor="middle">요청 전송</text>
+        </g>
+        <g data-detail="context" data-edge-from="zap" data-edge-to="target" data-edge-label="HTTP" data-edge-key="14" data-edge-id="zap-target">
+          <rect x="879" y="745" width="30" height="14" rx="3" class="c-mask"/>
+          <text x="894" y="755" class="t-edge-default" font-size="8" text-anchor="middle">HTTP</text>
+        </g>
+        <g data-detail="context" data-edge-from="analyzer" data-edge-to="firefox" data-edge-label="XSS 실행 확인" data-edge-key="15" data-edge-id="analyzer-firefox">
+          <rect x="1421.6" y="545" width="72.4" height="14" rx="3" class="c-mask"/>
+          <text x="1457.8" y="555" class="t-edge-dashed" font-size="8" text-anchor="middle">XSS 실행 확인</text>
+        </g>
+        <g data-detail="context" data-edge-from="firefox" data-edge-to="target" data-edge-label="페이지 열기" data-edge-key="16" data-edge-id="firefox-target">
+          <rect x="1218.6" y="832" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="1250" y="842" class="t-edge-dashed" font-size="8" text-anchor="middle">페이지 조회</text>
+        </g>
+
+        <!-- Boundary labels (foreground masks keep routes out of titles) -->
+        <g data-graph-role="structural-frame-label" data-composition-frame-id="0" data-composition-frame-kind="region" data-composition-frame-label="로컬 웹 서버 (src/web)">
+          <rect data-graph-role="structural-frame-label-mask" x="244" y="198" width="150.51614223225806" height="18" rx="3" class="c-mask"/>
+          <text data-boundary-label="" x="248" y="212.6451622903226" class="t-cloud" font-size="10.645162290322581" font-weight="600">로컬 웹 서버 (src/web)</text>
+        </g>
+
+        <!-- Legend -->
+        
+      </svg>

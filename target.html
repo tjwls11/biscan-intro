@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="BIScan 테스트 대상과 평가 방법" />
+    <title>테스트 대상 | BIScan</title>
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap"
+    />
+    <link rel="stylesheet" href="./intro.css" />
+    <script src="./target.js" defer></script>
+  </head>
+  <body>
+    <a class="skip" href="#content">본문으로 이동</a>
+    <header class="header">
+      <div class="header-inner wrap">
+        <a class="brand" href="./index.html" aria-label="BIScan 홈">BIScan</a>
+        <nav aria-label="페이지 메뉴">
+          <a href="./index.html#workflow">사용 흐름</a
+          ><a href="./target.html" aria-current="page">테스트 대상</a>
+        </nav>
+      </div>
+    </header>
+    <main id="top">
+      <section class="doc-hero wrap" aria-labelledby="doc-title">
+        <a class="back-link" href="./index.html#target">소개 페이지</a>
+        <h1 id="doc-title">테스트 대상</h1>
+        <p class="doc-lead">
+          정량적 탐지 성능 평가와 실제 웹 환경에서의 기능 검증을 위한 테스트 대상 4종
+        </p>
+      </section>
+
+      <div class="doc-layout wrap">
+        <nav class="toc" aria-label="목차">
+          <ol>
+            <li><a href="#section-1">대상 목록</a></li>
+            <li><a href="#section-2">자체 테스트 사이트</a></li>
+            <li><a href="#section-3">도구 비교</a></li>
+            <li><a href="#section-4">SQLi 비교 실험</a></li>
+          </ol>
+        </nav>
+
+        <div id="content" class="doc-content">
+          <section id="section-1" class="doc-section" aria-labelledby="section-1-title">
+            <h2 id="section-1-title">대상 목록</h2>
+            <p>
+              정답표가 있는 대상 2곳으로 탐지율과 오탐률을 측정하고, 공개 취약 웹 2곳으로 저장형 재조회와 다양한 입력 경로에서의 동작 확인
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">대상</th>
+                    <th scope="col">구분</th>
+                    <th scope="col">용도</th>
+                    <th scope="col">규모</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">OWASP Benchmark 1.2</th>
+                    <td>정량 평가</td>
+                    <td>정답표 기반 정량 평가</td>
+                    <td>SQLi 504건, XSS 455건</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">자체 테스트 사이트</th>
+                    <td>정량 평가</td>
+                    <td>PHP, MySQL 게시판</td>
+                    <td>SQLi 8곳, XSS 7곳</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">DVWA</th>
+                    <td>동작 검증</td>
+                    <td>취약 웹 애플리케이션, 저장형 재조회 등 동작 검증</td>
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <th scope="row">WackoPicko</th>
+                    <td>동작 검증</td>
+                    <td>취약점 테스트용 웹 환경, 다양한 입력과 공격 경로 검증</td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="section-2" class="doc-section" aria-labelledby="section-2-title">
+            <h2 id="section-2-title">자체 테스트 사이트</h2>
+            <p>
+              스캐너 평가용으로 직접 제작한 PHP, MySQL 게시판. 위치가 알려진 취약점과 안전한 코드를 함께 두고 탐지 결과를 정답표와 비교
+            </p>
+            <dl class="spec-list">
+              <div>
+                <dt>실행 환경</dt>
+                <dd>PHP 8.2 Apache, MySQL 8.0, Docker Compose</dd>
+              </div>
+              <div>
+                <dt>SQL Injection</dt>
+                <dd>8곳, 파라미터 13개</dd>
+              </div>
+              <div>
+                <dt>XSS</dt>
+                <dd>7곳, Reflected 2, Stored 4, DOM 1</dd>
+              </div>
+              <div>
+                <dt>평가 방식</dt>
+                <dd>정답표 기준 탐지, 누락, 오탐 계산</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section id="section-3" class="doc-section" aria-labelledby="section-3-title">
+            <h2 id="section-3-title">도구 비교</h2>
+            <p>
+              동일한 테스트 대상에 대한 기존 도구와 구현 시스템의 XSS 유형별 탐지 수, 오탐 수 비교
+            </p>
+            <dl class="spec-list">
+              <div>
+                <dt>비교 도구</dt>
+                <dd>OWASP ZAP, Dalfox, 구현 시스템</dd>
+              </div>
+              <div>
+                <dt>비교 항목</dt>
+                <dd>반사형, 저장형, DOM 탐지 수와 오탐 수</dd>
+              </div>
+            </dl>
+          </section>
+
+          <section id="section-4" class="doc-section" aria-labelledby="section-4-title">
+            <h2 id="section-4-title">SQLi 검증 방식별 비교 실험</h2>
+            <p>
+              Benchmark SQLi 504건에 대한 같은 응답을 E0에서 E3까지 단계별로 재판정을 통한 검증 조건 추가에 따른 탐지율과 오탐률 변화 측정
+            </p>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">단계</th>
+                    <th scope="col">검증 방식</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row"><code>E0</code></th><td>단순 응답 비교</td></tr>
+                  <tr><th scope="row"><code>E1</code></th><td>E0 + 동적 영역 제거, 기준 2회 비교</td></tr>
+                  <tr><th scope="row"><code>E2</code></th><td>E1 + 대조 입력으로 잡음 측정</td></tr>
+                  <tr><th scope="row"><code>E3</code></th><td>E2 + 반복 재현 요구</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <h3>평가 기준</h3>
+            <dl class="spec-list">
+              <div>
+                <dt>엄격 기준</dt>
+                <dd>취약 가능성 높음만 인정</dd>
+              </div>
+              <div>
+                <dt>완화 기준</dt>
+                <dd>취약 신호 관찰 포함</dd>
+              </div>
+              <div>
+                <dt>측정 항목</dt>
+                <dd>탐지율, 오탐률, 판정에 쓴 응답 수</dd>
+              </div>
+            </dl>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="page-footer">
+      <div class="footer-inner wrap">
+        <p class="footer-team">
+          <strong>그것이정보남</strong>박윤지, 백서진, 정보남, 함근희
+        <span class="footer-advisor">지도교수 이병천 교수님</span></p>
+        <a
+          class="footer-link"
+          href="https://github.com/gudrhkdvps07/BIScan"
+          target="_blank"
+          rel="noopener noreferrer"
+          >GitHub</a
+        >
+      </div>
+      <p class="footer-copy wrap">© 2026 그것이정보남</p>
+    </footer>
+  </body>
+</html>
